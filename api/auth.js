@@ -32,7 +32,7 @@ auth.post("/login", async (c) => {
 
     const token = uuidv4();
 
-    sessions.ser(token, user);
+    sessions.set(token, user);
 
     return c.json({
         message: "Login succesed",

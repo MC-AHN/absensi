@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
+import { auth } from "./api/auth.js";
 
 const app = new Hono();
 
@@ -16,6 +17,8 @@ app.get("/api", (c) => {
         message: "API Is Running"
     })
 })
+
+app.route("/auth", auth);
 
 const PORT = 8000;
 
