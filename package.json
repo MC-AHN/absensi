@@ -6,15 +6,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:seed": "node db/seed.js"
+    "db:seed": "node db/seed.js",
+    "dev": "node --watch server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hono/node-server": "^2.0.0",
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
-    "drizzle-orm": "^0.45.2"
+    "drizzle-orm": "^0.45.2",
+    "hono": "^4.12.14"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.10",
