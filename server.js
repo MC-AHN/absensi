@@ -11,6 +11,12 @@ app.get("/about", (c) => {
     return c.text("this is about page")
 })
 
+app.get("/api", (c) => {
+    return c.json({
+        message: "API Is Running"
+    })
+})
+
 const PORT = 8000;
 
 console.log(`Server run at http://localhost:${PORT}`);
