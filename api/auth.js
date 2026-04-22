@@ -50,4 +50,18 @@ auth.post("/logout", async (c) => {
     });
 });
 
+auth.get("/me", async (c) => {
+    const token = c.req.header("Authorization");
+
+    const user = sessions.get(token);
+
+    if (!user) {
+        return c.json({ message: "Unauthorized "}, 401);
+    }
+
+    return c.json({
+        user,
+    });
+});
+
 export { auth, sessions };
