@@ -40,4 +40,14 @@ auth.post("/login", async (c) => {
     });
 });
 
+auth.post("/logout", async (c) => {
+    const token = c.req.header("Authorization");
+
+    sessions.delete(token);
+
+    return c.json({
+        message: "Logout succeed"
+    });
+});
+
 export { auth, sessions };
