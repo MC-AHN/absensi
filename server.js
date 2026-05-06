@@ -1,35 +1,38 @@
-import { Hono } from "hono";
-import { serve } from "@hono/node-server";
-import { serveStatic } from "@hono/node-server/serve-static";
-
-import { auth } from "./api/auth.js";
-import { admin } from "./api/admin.js";
-import { user } from "./api/user.js";
-
-const app = new Hono();
+// get off, just for local or vps mode
 
 
-app.get("/about", (c) => {
-    return c.text("this is about page")
-})
+// import { Hono } from "hono";
+// import { serve } from "@hono/node-server";
+// import { serveStatic } from "@hono/node-server/serve-static";
 
-app.get("/api", (c) => {
-    return c.json({
-        message: "API Is Running"
-    })
-})
+// import { auth } from "./api/auth.js";
+// import { admin } from "./api/admin.js";
+// import { user } from "./api/user.js";
 
-app.route("/auth", auth);
-app.route("/admin", admin);
-app.route("/user", user);
+// const app = new Hono();
 
-const PORT = 8000;
 
-console.log(`Server run at http://localhost:${PORT}`);
+// app.get("/about", (c) => {
+//     return c.text("this is about page")
+// })
 
-app.get("/*", serveStatic({ root: "./public" }));
+// app.get("/api", (c) => {
+//     return c.json({
+//         message: "API Is Running"
+//     })
+// })
 
-serve({
-    fetch: app.fetch,
-    port: PORT
-});
+// app.route("/auth", auth);
+// app.route("/admin", admin);
+// app.route("/user", user);
+
+// const PORT = 8000;
+
+// console.log(`Server run at http://localhost:${PORT}`);
+
+// app.get("/*", serveStatic({ root: "./public" }));
+
+// serve({
+//     fetch: app.fetch,
+//     port: PORT
+// });
