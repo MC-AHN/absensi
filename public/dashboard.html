@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h2>Dashboard Admin</h2>
+    <p>Login : <strong id="adminLabel">-</strong></p>
+    <button onclick="logout()">Logout</button>
+
+    <hr>
+
+    <h3>Add new user</h3>
+    <form onsubmit="addUser(event)">
+        <div>
+            <label for="">Name: <input type="text" name="name" id="name" required></label>
+        </div>
+        <div>
+            <label for="">Email: <input type="email" name="email" id="email"></label>
+        </div>
+        <div>
+            <label for="">Password: <input type="password" name="pass" id="pass"></label>
+        </div>
+        <div>
+            <label for="">Role: 
+                <select name="role" id="role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </label>
+        </div>
+        <button type="submit">Add User</button>
+    </form>
+    <p id="result"></p>
+
+    <hr>
+
+    <h3>List User</h3>
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            <tr>
+                <td colspan="4">Loading...</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h3>Recap Absensi</h3>
+    <label for="">
+        Month:
+        <input type="month" name="month" id="month">
+    </label>
+    <button onclick="loadAbsensi()">Show</button>
+    <p id="absensiResult"></p>
+
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Check In</th>
+                <th>Check Out</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody id="absensiTableBody">
+            <tr>
+                <td colspan="5">Choice month and click to show</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        document.getElementById("month").value = `${yyyy}-${mm}`;
+
+        (async () => {
+            const res = await fetch('/auth/me', { credentials: "include" });
+            if (!res.ok) { window.location.href = "/login.html"; return;}
+            const { user } = await res.json();
+            document.getElementById("adminLabel").textContent = user.name;
+            await loadUser();
+            await loadAbsensi();
+        })();
+
+        async function loadUsers() {
+            const res = await fetch('/admin/users', { credentials: "include" });
+            if (res.status === 401 || res.status === 403) { window.location.href = '/login.html'; return; }
+            const { data } = await res.json();
+            const tbody = document.getElementById("tbody");
+            if (!data || data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4">User is empty.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map(u => `
+                <tr>
+                    <td>${u.name}</td>
+                    <td>${u.email}</td>
+                    <td>${u.role}</td>
+                    <td>${u.is_active ? "Active" : "NonActive"}</td>
+                </tr>
+                `
+            ).join('');
+        }
+
+        async function addUser(e) {
+            e.preventDefault();
+            const body = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                password: document.getElementById('pass').value,
+                role: document.getElementById('role').value,
+            };
+
+            const res = await fetch('/admin/users', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+                credentials: "include",
+            });
+            const data = await res.json();
+            document.getElementById("result").textContent = data.message;
+
+            if (res.ok) {
+                e.target.reset();
+                await loadUsers();
+            }
+        }
+
+        async function loadAbsensi() {
+            const month = document.getElementById("month").value;
+            if (!month) {
+                document.getElementById('absensiResult').textContent = "Choose month early.";
+                return;
+            }
+
+            const res = await fetch(`admin/attendances?month=${month}`, { credentials: "include" });
+            const data = await res.json();
+            const tbody = document.getElementById("absensiTableBody")
+        }
+    </script>
+</body>
+</html>
