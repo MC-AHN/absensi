@@ -1,13 +1,14 @@
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
+import { serveStatic } from "@hono/node-server/serve-static";
+
 import { auth } from "./api/auth.js";
 import { admin } from "./api/admin.js";
+import { user } from "./api/user.js";
 
 const app = new Hono();
 
-app.get("/", (c) => {
-    return c.text("Hello Word!");
-});
+app.get("/", serveStatic({ root: "./public" }));
 
 app.get("/about", (c) => {
     return c.text("this is about page")
@@ -21,6 +22,7 @@ app.get("/api", (c) => {
 
 app.route("/auth", auth);
 app.route("/admin", admin);
+app.route("/user", user);
 
 const PORT = 8000;
 
