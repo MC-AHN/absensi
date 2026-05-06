@@ -151,7 +151,40 @@
 
             const res = await fetch(`admin/attendances?month=${month}`, { credentials: "include" });
             const data = await res.json();
-            const tbody = document.getElementById("absensiTableBody")
+            const tbody = document.getElementById("absensiTableBody");
+            document.getElementById("absensiResult").textContent = '';
+
+            if (!res.ok) {
+                document.getElementById('absensiResult').textContent = data.message;
+                tbody.innerHTML = `<tr><td colspan="5">-</td></tr>`
+                return;
+            }
+
+            if (!data.data || data.data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5">Not Found data absensi in this month</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.data.map(a => `
+                <tr>
+                    <td>${a.user_name ?? '-'}</td>
+                    <td>${a.user_email ?? '-'}</td>
+                    <td>${formatTanggal(a.check_in)}</td>
+                    <td>${a.check_out ? formatTanggal(a.check_out) : '-'}</td>
+                    <td>${a.note ?? '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function formatTanggal(iso) {
+            if (!iso) return '-';
+            const d = new Date(iso);
+            return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        async function logout() {
+            await fetch('/auth/logout', { method: 'POST', credentials: "include" });
+            window.location.href = '/login.html'
         }
     </script>
 </body>
