@@ -8,7 +8,6 @@ import { user } from "./api/user.js";
 
 const app = new Hono();
 
-app.get("/", serveStatic({ root: "./public" }));
 
 app.get("/about", (c) => {
     return c.text("this is about page")
@@ -27,6 +26,8 @@ app.route("/user", user);
 const PORT = 8000;
 
 console.log(`Server run at http://localhost:${PORT}`);
+
+app.get("/*", serveStatic({ root: "./public" }));
 
 serve({
     fetch: app.fetch,
