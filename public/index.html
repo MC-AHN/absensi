@@ -28,7 +28,7 @@
             });
 
             const data = await res.json();
-            document.getElementById("result").innerText = data.json();
+            document.getElementById("result").innerText = data.message();
         }
 
         async function checkOut() {
