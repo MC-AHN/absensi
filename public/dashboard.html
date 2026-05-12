@@ -89,7 +89,7 @@
         document.getElementById("month").value = `${yyyy}-${mm}`;
 
         (async () => {
-            const res = await fetch('/auth/me', { credentials: "include" });
+            const res = await fetch('/api/auth/me', { credentials: "include" });
             if (!res.ok) { window.location.href = "/login.html"; return;}
             const { user } = await res.json();
             document.getElementById("adminLabel").textContent = user.name;
@@ -98,7 +98,7 @@
         })();
 
         async function loadUsers() {
-            const res = await fetch('/admin/users', { credentials: "include" });
+            const res = await fetch('/api/admin/users', { credentials: "include" });
             if (res.status === 401 || res.status === 403) { window.location.href = '/login.html'; return; }
             const { data } = await res.json();
             const tbody = document.getElementById("tbody");
@@ -127,7 +127,7 @@
                 role: document.getElementById('role').value,
             };
 
-            const res = await fetch('/admin/users', {
+            const res = await fetch('/api/admin/users', {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
@@ -149,7 +149,7 @@
                 return;
             }
 
-            const res = await fetch(`admin/attendances?month=${month}`, { credentials: "include" });
+            const res = await fetch(`/apiadmin/attendances?month=${month}`, { credentials: "include" });
             const data = await res.json();
             const tbody = document.getElementById("absensiTableBody");
             document.getElementById("absensiResult").textContent = '';
@@ -183,7 +183,7 @@
         }
 
         async function logout() {
-            await fetch('/auth/logout', { method: 'POST', credentials: "include" });
+            await fetch('/api/auth/logout', { method: 'POST', credentials: "include" });
             window.location.href = '/login.html'
         }
     </script>

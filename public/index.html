@@ -19,7 +19,7 @@
         async function checkIn() {
             const identifier = document.getElementById("identifier").value;
 
-            const res = await fetch('/user/check-in', {
+            const res = await fetch('/api/user/check-in', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -34,7 +34,7 @@
         async function checkOut() {
             const identifier = document.getElementById("identifier").value;
 
-            const res = await fetch("/user/check-out", {
+            const res = await fetch("/api/user/check-out", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

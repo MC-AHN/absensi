@@ -7,9 +7,9 @@ import { serveStatic } from "hono/serve-static";
 
 const app = new Hono();
 
-app.route("/auth", auth);
-app.route("/admin", admin);
-app.route("/user", user);
+app.route("/api/auth", auth);
+app.route("/api/admin", admin);
+app.route("/api/user", user);
 
 app.use("/*", serveStatic({ root:"./public"  }))
 
