@@ -93,7 +93,7 @@
             if (!res.ok) { window.location.href = "/login.html"; return;}
             const { user } = await res.json();
             document.getElementById("adminLabel").textContent = user.name;
-            await loadUser();
+            await loadUsers();
             await loadAbsensi();
         })();
 
