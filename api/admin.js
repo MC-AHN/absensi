@@ -3,7 +3,7 @@ import { db } from "../db/index.js";
 import { users, attendances } from "../db/schema.js";
 import { authMiddleware } from "../middleware/auth.js";
 import { adminOnly } from "../middleware/admin.js";
-import { eq, and, gte, lte } from "drizzle-orm";
+import { eq, and, gte, lte, lt } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
 const admin = new Hono();
