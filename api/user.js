@@ -21,15 +21,15 @@ async function findUser(identifier) {
         .select()
         .from(users)
         .where(eq(users.email, identifier));
-        
-        return result[0];
+
+    return result[0];
 }
 
 user.post('/check-in', async (c) => {
     const body = await c.req.json();
     const { identifier } = body;
 
-    if(!identifier) {
+    if (!identifier) {
         return c.json({ message: 'identifier required' }, 400);
     }
 
@@ -84,6 +84,8 @@ user.post('/check-out', async (c) => {
     if (!identifier) {
         return c.json({ message: 'identifier required!' }, 400);
     }
+
+    const user = await findUser(identifier);
 
     const now = new Date();
 
