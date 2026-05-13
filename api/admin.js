@@ -78,10 +78,10 @@ admin.get('/attendances', async (c) => {
         })
         .from(attendances)
         .leftJoin(users, eq(attendances.user_id, users.id))
-        .where(and(gte(attendances.check_in, start), It(attendances.check_out, end)))
+        .where(and(gte(attendances.check_in, start), lt(attendances.check_out, end)))
         .orderBy(attendances.check_in);
 
-    return c.json({ date });
+    return c.json({ data });
 });
 
 admin.get("/dashboard", (c) => {
