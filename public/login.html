@@ -3,22 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login - Elite Gateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Geist', sans-serif; }
+        .glass-card {
+            background: rgba(18, 18, 18, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
 </head>
-<body>
-    <h2>Login Admin</h2>
+<body class="bg-[#050505] text-gray-200 min-h-screen flex items-center justify-center p-6">
 
-    <input type="email" name="email" id="email" placeholder="Email"><br>
-    <input type="password" name="pass" id="pass" placeholder="Password">
+    <div class="max-w-md w-full">
+        <div class="text-center mb-10">
+            <h2 class="text-xs tracking-[0.4em] text-blue-500 font-bold uppercase mb-2">Security Gateway</h2>
+            <h1 class="text-3xl font-bold tracking-tighter text-white">AUTHENTICATION <span class="font-thin text-gray-500">PORTAL</span></h1>
+        </div>
 
-    <button onclick="login()">Login</button>
+        <div class="glass-card rounded-3xl p-8 shadow-2xl">
+            <div class="space-y-5">
+                <div>
+                    <label for="email" class="text-[10px] uppercase tracking-widest text-gray-500 ml-1 mb-2 block">Identity Email</label>
+                    <input type="email" name="email" id="email" 
+                        class="w-full bg-black/50 border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-300 placeholder:text-gray-700" 
+                        placeholder="name@domain.com">
+                </div>
 
-    <p id="result"></p>
+                <div>
+                    <label for="pass" class="text-[10px] uppercase tracking-widest text-gray-500 ml-1 mb-2 block">Security Password</label>
+                    <input type="password" name="pass" id="pass" 
+                        class="w-full bg-black/50 border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-300 placeholder:text-gray-700" 
+                        placeholder="••••••••">
+                </div>
+
+                <div class="pt-2">
+                    <button onclick="login()" 
+                        class="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-gray-200 transition-all duration-300 active:scale-95 text-xs tracking-widest shadow-lg shadow-white/5">
+                        INITIALIZE LOGIN
+                    </button>
+                </div>
+            </div>
+
+            <div id="status-container" class="mt-6 pt-5 border-t border-white/5 hidden">
+                <p id="result" class="text-center text-xs font-medium tracking-wide text-blue-400 italic min-h-[16px]"></p>
+            </div>
+        </div>
+
+        <p class="text-center mt-10 text-[10px] text-gray-600 tracking-[0.2em] uppercase">
+            Encrypted Session • Authorization Required
+        </p>
+    </div>
 
     <script>
+        function updateUI(message) {
+            const container = document.getElementById("status-container");
+            const resultEl = document.getElementById("result");
+            container.classList.remove("hidden");
+            resultEl.innerText = message;
+        }
+
         async function login() {
             const email = document.getElementById("email").value;
             const password = document.getElementById("pass").value;
+
+            if (!email || !password) {
+                return updateUI("Email and password are required.");
+            }
 
             const res = await fetch("/api/auth/login", {
                 method: "POST",
@@ -27,7 +80,7 @@
             });
 
             const data = await res.json();
-            document.getElementById("result").innerText = data.message;
+            updateUI(data.message);
 
             if (!res.ok) return;
 
